@@ -3,6 +3,15 @@ name = "apos"
 version = "0.1.0"
 description = "The backbone for message-driven applications."
 authors = ["Max Kossatz <max@kossatzonline.de>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/mkossatz/apos"
+repository = "https://github.com/mkossatz/apos"
+keywords = ["messenger", "command", "event", "query", "response"]
+include = [
+    "LICENSE",
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.9"
