@@ -113,11 +113,11 @@ messenger = apos.Messenger()
 deactivate_user = DeactivateUser(messenger)
 withdraw_applications = WithdrawApplications(messenger)
 
-# some interface implementation
+# subscribing to messages (application configuration)
 messenger.subscribe_command(DeactivateUserCommand, deactivate_user)
 messenger.subscribe_event(UserDeactivatedEvent, withdraw_applications)
 
-# some other interface implementation
+# some interface implementation
 events = messenger.execute_command(DeactivateUserCommand(user_id))
 
 ```
