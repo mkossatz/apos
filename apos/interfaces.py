@@ -6,7 +6,7 @@ from dataclasses import dataclass
 class IMessenger(ABC):
 
     @abstractmethod
-    def execute_command(
+    def publish_command(
         self,
         command: "ICommand"
     ) -> List["IEvent"]:
@@ -36,7 +36,7 @@ class IMessenger(ABC):
         pass
 
     @abstractmethod
-    def execute_query(
+    def publish_query(
         self,
         query: "IQuery"
     ) -> "IResponse":

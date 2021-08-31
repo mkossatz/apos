@@ -23,14 +23,14 @@ class Messenger(IMessenger):
     def _clear_tmp_published_events(self):
         self._tmp_published_events = list()
 
-    def execute_command(
+    def publish_command(
         self,
         command: ICommand
     ) -> List[IEvent]:
         self._clear_tmp_published_events()
         command_name: str = command.__class__.__name__
         if command_name not in self._command_handlers:
-            raise MissingHandler("Cant execute command {} because no matching handler was found.".format(command))
+            raise MissingHandler("Cant publish command {} because no matching handler was found.".format(command))
         command_handler: ICommandHandler = self._command_handlers[command_name]
         command_handler(command)
         return self._tmp_published_events
@@ -67,13 +67,13 @@ class Messenger(IMessenger):
         if event_handler not in self._event_handlers[event_name]:
             self._event_handlers[event_name].append(event_handler)
 
-    def execute_query(
+    def publish_query(
         self,
         query: IQuery
     ) -> IResponse:
         query_name: str = query.__class__.__name__
         if query_name not in self._query_handlers:
-            raise MissingHandler("Cant execute query {} because no matching handler was found.".format(query))
+            raise MissingHandler("Cant publish query {} because no matching handler was found.".format(query))
         query_handler: IQueryHandler = self._query_handlers[query_name]
         response: IResponse = query_handler(query)
         return response
