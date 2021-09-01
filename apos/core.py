@@ -33,7 +33,7 @@ class Messenger(IMessenger):
         command_name: str = command.__class__.__name__
         if command_name not in self._command_handlers:
             raise MissingHandler(
-                "Cant publish command {} because no matching handler was found.".format(command))
+                "Publishing command {} failed because of missing subscriber.".format(command))
         command_handler: ICommandHandler = self._command_handlers[command_name]
         command_handler(command)
 
@@ -77,7 +77,7 @@ class Messenger(IMessenger):
         query_name: str = query.__class__.__name__
         if query_name not in self._query_handlers:
             raise MissingHandler(
-                "Cant publish query {} because no matching handler was found.".format(query))
+                "Publishing query {} failed because of missing subscriber.".format(query))
         query_handler: IQueryHandler = self._query_handlers[query_name]
         response: IResponse = query_handler(query)
         return response
