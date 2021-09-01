@@ -27,10 +27,10 @@ In this particular case we are looking at the boundry between the interface, whi
 ### Publishing
 
 ```python
-events: List[apos.IEvent] = messenger.publish_command(
-            CreateUserCommand(user_name="Max"))
+messenger.publish_command(CreateUserCommand(user_name="Max"))
+events: List[apos.IEvent] = messenger.get_published_events()
 ```
-The example above shows how an interface implementation can use the apos.Messenger to publish a command. The apos.Messenger will execute the Callable mapped to the name of the command Class. At the same time, it will record the event published by the executed business function, as well as any other events that are published by business functions that are executed as a result of subscribing to the prior events. These events are returned upon the completion of the command execution. It is up to the interface implementation what it wants to do with these events, but an example would be returning them in a HTTP response or publishing the messages to an external message broker like Kafka or RabbitMQ.
+The example above shows how an interface implementation can use the apos.Messenger to publish a command. The apos.Messenger will execute the Callable mapped to the name of the command Class. At the same time, it will record the event published by the executed business function, as well as any other events that are published by business functions that are executed as a result of subscribing to the prior events. These events can be retrieved from the apos.Messenger using the get_published_events method. It is up to the interface implementation what it wants to do with these events, but an example would be returning them in a HTTP response or publishing the messages to an external message broker like Kafka or RabbitMQ.
 
 ```python
 response: RetrievedUserResponse = messenger.publish_query(
