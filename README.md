@@ -71,57 +71,7 @@ messenger.subscribe_event(
 The example above shows how the apos.Messenger can be used to subscribe a business function to an event. In this case, the business function for withdrawing job applications subscribes to the UserDeactivatedEvent. This means that if the user deactivation business function in the earlier example completes by publishing a UserDeactivatedEvent, the apos.Messenger would react by executing the business function for withdrawing the job applications. Upon calling the function, the event would be passed as an object as a parameter.
 
 
-## Complete Example
-```python
+## Complete Examples
 
-@dataclass
-class DeactivateUserCommand:
-    user_id: str
-
-@dataclass
-class UserDeactivatedEvent:
-    user_id: str
-
-@dataclass
-class ApplicationsWithdrawnEvent:
-    application_ids: List[str]
-
-
-class DeactivateUser:
-
-    def __init__(self, messenger) -> None:
-        self._messenger = messenger
-
-    def __call__(self, command: DeactivateUserCommand) -> None:
-        # Implementation of user deactivation
-        self._messenger.publish_event(
-            UserDeactivatedEvent(user_id))
-
-
-class WithdrawApplications:
-
-    def __init__(self, messenger) -> None:
-        self._messenger = messenger
-
-    def __call__(self, event: UserDeactivatedEvent) -> None:
-        # Implementation of job applications withdraw
-        self._messenger.publish_event(
-            ApplicationsWithdrawnEvent(application_ids))
-
-
-messenger = apos.Messenger()
-deactivate_user = DeactivateUser(messenger)
-withdraw_applications = WithdrawApplications(messenger)
-
-# subscribing to messages (application configuration)
-messenger.subscribe_command(DeactivateUserCommand, deactivate_user)
-messenger.subscribe_event(UserDeactivatedEvent, withdraw_applications)
-
-# some interface implementation
-events = messenger.execute_command(DeactivateUserCommand(user_id))
-
-```
-
-Please mind, that the code above is missing some business logic implementation and variables to keep the example simple.
-
-Optionally, you can implement type-hinting by using the interfaces provided by apos as abstracted Classes. For example, apos provides the apos.IEvent Class, which a custome event Class can extend, and the apos.IEventHandler Class, which a business function Class can extend.  
+You can find examples in the examples directory of the projects repository.
+https://github.com/mkossatz/apos/tree/main/examples
