@@ -59,7 +59,7 @@ class Messenger(IMessenger):
         for event_handler in event_handlers:
             event_handler(event)
 
-    def subscribe_events(
+    def subscribe_event(
         self,
         event_cls: Type[IEvent],
         event_handlers: List[IEventHandler]

@@ -42,7 +42,7 @@ The example above shows that the apos.Messenger equally supports query messages.
 
 ```python
 messenger.subscribe_command(CreateUserCommand, create_user)
-messenger.subscribe_events(UserCreatedEvent, [email_user])
+messenger.subscribe_event(UserCreatedEvent, [email_user])
 messenger.subscribe_query(RetrieveUserQuery, retrieve_user)
 ```
 The example above shows how the apos.Messenger is used to subscribe functions to message Classes. The apos.Messenger will record these subscriptions by mapping the Class names to the according Callables. Be mindful of the following restrictions:
@@ -65,7 +65,7 @@ The example above shows how an event can be published. In this case, the busines
 ### Subscribing
 
 ```python
-messenger.subscribe_events(
+messenger.subscribe_event(
     UserDeactivatedEvent, [withdraw_job_applications])
 ```
 The example above shows how the apos.Messenger can be used to subscribe a business function to an event. In this case, the business function for withdrawing job applications subscribes to the UserDeactivatedEvent. This means that if the user deactivation business function in the earlier example completes by publishing a UserDeactivatedEvent, the apos.Messenger would react by executing the business function for withdrawing the job applications. Upon calling the function, the event would be passed as an object as a parameter.

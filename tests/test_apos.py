@@ -20,7 +20,7 @@ def test_publish_event():
         assert isinstance(event, TestOneEvent)
         messenger.publish_event(TestTwoEvent())
 
-    messenger.subscribe_events(TestOneEvent, [test_event_handler])
+    messenger.subscribe_event(TestOneEvent, [test_event_handler])
     messenger.publish_event(TestOneEvent())
     assert len(messenger.get_published_events()) == 2
     assert isinstance(messenger.get_published_events()[0], TestOneEvent)

@@ -47,7 +47,7 @@ greet_new_user = GreetNewUser(messenger)
 
 # subscribing to messages (application configuration)
 messenger.subscribe_command(RegisterUserCommand, register_user)
-messenger.subscribe_events(UserRegisteredEvent, [greet_new_user])
+messenger.subscribe_event(UserRegisteredEvent, [greet_new_user])
 
 # some interface implementation
 messenger.publish_command(RegisterUserCommand("Max"))
