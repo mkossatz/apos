@@ -28,10 +28,10 @@ class IMessenger(ABC):
         pass
 
     @abstractmethod
-    def subscribe_event(
+    def subscribe_events(
         self,
         event_cls: Type["IEvent"],
-        event_handler: "IEventHandler"
+        event_handler: List["IEventHandler"]
     ):
         pass
 

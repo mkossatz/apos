@@ -59,16 +59,17 @@ class Messenger(IMessenger):
         for event_handler in event_handlers:
             event_handler(event)
 
-    def subscribe_event(
+    def subscribe_events(
         self,
         event_cls: Type[IEvent],
-        event_handler: IEventHandler
+        event_handlers: List[IEventHandler]
     ) -> None:
         event_name: str = event_cls.__name__
         if event_name not in self._event_handlers.keys():
             self._event_handlers[event_name] = []
-        if event_handler not in self._event_handlers[event_name]:
-            self._event_handlers[event_name].append(event_handler)
+        for event_handler in event_handlers:
+            if event_handler not in self._event_handlers[event_name]:
+                self._event_handlers[event_name].append(event_handler)
 
     def publish_query(
         self,
