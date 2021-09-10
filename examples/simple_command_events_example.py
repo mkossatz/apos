@@ -41,7 +41,7 @@ class GreetNewUser:
             NewUserGreetedEvent(event.user_name))
 
 
-messenger = apos.Messenger()
+messenger = apos.Apos()
 register_user = RegisterUser(messenger)
 greet_new_user = GreetNewUser(messenger)
 

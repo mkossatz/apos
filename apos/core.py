@@ -1,6 +1,6 @@
 from typing import Type, Dict, List
 
-from .interfaces import IMessenger
+from .interfaces import IApos
 from .interfaces import IEvent
 from .interfaces import ICommand
 from .interfaces import IQuery
@@ -12,7 +12,7 @@ from .exceptions import MissingHandler
 from .exceptions import OverwritingHandler
 
 
-class Messenger(IMessenger):
+class Apos(IApos):
 
     def __init__(self) -> None:
         self._command_handlers: Dict[str, ICommandHandler] = dict()

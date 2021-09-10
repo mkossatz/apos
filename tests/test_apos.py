@@ -8,7 +8,7 @@ def test_version():
 
 
 def test_publish_event():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestOneEvent:
         pass
@@ -28,7 +28,7 @@ def test_publish_event():
 
 
 def test_command_and_event():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestCommand:
         pass
@@ -47,7 +47,7 @@ def test_command_and_event():
 
 
 def test_query():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestQuery:
         pass
@@ -70,16 +70,16 @@ def test_missing_handler():
         pass
 
     with pytest.raises(apos.MissingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.publish_command(TestMessage())
 
     with pytest.raises(apos.MissingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.publish_query(TestMessage())
 
 
 def test_overwriting_handler():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestMessage:
         pass
@@ -88,11 +88,11 @@ def test_overwriting_handler():
         pass
 
     with pytest.raises(apos.OverwritingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.subscribe_command(TestMessage, test_handler)
         messenger.subscribe_command(TestMessage, test_handler)
 
     with pytest.raises(apos.OverwritingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.subscribe_query(TestMessage, test_handler)
         messenger.subscribe_query(TestMessage, test_handler)

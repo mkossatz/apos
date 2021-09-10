@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 
-class IMessenger(ABC):
+class IApos(ABC):
 
     @abstractmethod
     def publish_command(

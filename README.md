@@ -30,13 +30,13 @@ In this particular case we are looking at the boundry between the interface, whi
 messenger.publish_command(CreateUserCommand(user_name="Max"))
 events: List[apos.IEvent] = messenger.get_published_events()
 ```
-The example above shows how an interface implementation can use the apos.Messenger to publish a command. The apos.Messenger will execute the Callable mapped to the name of the command Class. At the same time, it will record the event published by the executed business function, as well as any other events that are published by business functions that are executed as a result of subscribing to the prior events. These events can be retrieved from the apos.Messenger using the get_published_events method. It is up to the interface implementation what it wants to do with these events, but an example would be returning them in a HTTP response or publishing the messages to an external message broker like Kafka or RabbitMQ.
+The example above shows how an interface implementation can use the apos.Apos to publish a command. The apos.Apos will execute the Callable mapped to the name of the command Class. At the same time, it will record the event published by the executed business function, as well as any other events that are published by business functions that are executed as a result of subscribing to the prior events. These events can be retrieved from the apos.Apos using the get_published_events method. It is up to the interface implementation what it wants to do with these events, but an example would be returning them in a HTTP response or publishing the messages to an external message broker like Kafka or RabbitMQ.
 
 ```python
 response: RetrievedUserResponse = messenger.publish_query(
             RetrieveUserQuery(user_name="Max"))
 ```
-The example above shows that the apos.Messenger equally supports query messages. Publishing queries works like publishing commands, the only difference being that it will return the response object returned by the business function that subscribes to the query.
+The example above shows that the apos.Apos equally supports query messages. Publishing queries works like publishing commands, the only difference being that it will return the response object returned by the business function that subscribes to the query.
 
 ### Subscribing
 
@@ -45,7 +45,7 @@ messenger.subscribe_command(CreateUserCommand, create_user)
 messenger.subscribe_event(UserCreatedEvent, [email_user])
 messenger.subscribe_query(RetrieveUserQuery, retrieve_user)
 ```
-The example above shows how the apos.Messenger is used to subscribe functions to message Classes. The apos.Messenger will record these subscriptions by mapping the Class names to the according Callables. Be mindful of the following restrictions:
+The example above shows how the apos.Apos is used to subscribe functions to message Classes. The apos.Apos will record these subscriptions by mapping the Class names to the according Callables. Be mindful of the following restrictions:
 * Commands and queries are mapped one-to-one, only allowing one subscription per command
 * Events are mapped one-to-many, allowing multiple subscriptions per event
 
@@ -68,7 +68,7 @@ The example above shows how an event can be published. In this case, the busines
 messenger.subscribe_event(
     UserDeactivatedEvent, [withdraw_job_applications])
 ```
-The example above shows how the apos.Messenger can be used to subscribe a business function to an event. In this case, the business function for withdrawing job applications subscribes to the UserDeactivatedEvent. This means that if the user deactivation business function in the earlier example completes by publishing a UserDeactivatedEvent, the apos.Messenger would react by executing the business function for withdrawing the job applications. Upon calling the function, the event would be passed as an object as a parameter.
+The example above shows how the apos.Apos can be used to subscribe a business function to an event. In this case, the business function for withdrawing job applications subscribes to the UserDeactivatedEvent. This means that if the user deactivation business function in the earlier example completes by publishing a UserDeactivatedEvent, the apos.Apos would react by executing the business function for withdrawing the job applications. Upon calling the function, the event would be passed as an object as a parameter.
 
 
 ## Complete Examples
