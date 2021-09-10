@@ -4,7 +4,7 @@ import apos
 
 
 def test_version():
-    assert apos.__version__ == '0.1.3'
+    assert apos.__version__ == '0.2.1'
 
 
 def test_publish_event():
