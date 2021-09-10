@@ -27,3 +27,5 @@ IQueryHandler
 Apos
 MissingHandler
 OverwritingHandler
+
+apos = Apos()
