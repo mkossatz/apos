@@ -1,4 +1,6 @@
 from typing import Type, Dict, List
+from contextlib import contextmanager
+from copy import deepcopy
 
 from .interfaces import IApos
 from .interfaces import IEvent
@@ -19,6 +21,15 @@ class Apos(IApos):
         self._event_handlers: Dict[str, List[IEventHandler]] = dict()
         self._query_handlers: Dict[str, IQueryHandler] = dict()
         self._published_events: List[IEvent] = list()
+
+    @contextmanager
+    def session(self):
+        published_events_bkp = deepcopy(self._published_events)
+        self._published_events = list()
+        try:
+            yield self
+        finally:
+            self._published_events = published_events_bkp
 
     def get_published_events(self) -> List[IEvent]:
         return self._published_events

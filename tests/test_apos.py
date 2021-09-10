@@ -36,11 +36,11 @@ def test_command_and_event():
     class TestEvent:
         pass
 
-    def test_command_handler(command):
+    def command_handler(command):
         assert isinstance(command, TestCommand)
         messenger.publish_event(TestEvent())
 
-    messenger.subscribe_command(TestCommand, test_command_handler)
+    messenger.subscribe_command(TestCommand, command_handler)
     messenger.publish_command(TestCommand())
     assert len(messenger.get_published_events()) == 1
     assert isinstance(messenger.get_published_events()[0], TestEvent)
@@ -96,3 +96,32 @@ def test_overwriting_handler():
         messenger = apos.Apos()
         messenger.subscribe_query(TestMessage, test_handler)
         messenger.subscribe_query(TestMessage, test_handler)
+
+
+def test_sessions():
+    messenger = apos.Apos()
+
+    class TestCommand:
+        pass
+
+    class TestEvent:
+        pass
+
+    def command_handler(command):
+        messenger.publish_event(TestEvent())
+
+    messenger.subscribe_command(TestCommand, command_handler)
+
+    with messenger.session() as messenger_session_1:
+        messenger_session_1.publish_command(TestCommand())
+        assert len(messenger_session_1.get_published_events()) == 1
+        assert isinstance(
+            messenger_session_1.get_published_events()[0], TestEvent)
+
+    with messenger.session() as messenger_session_2:
+        messenger_session_2.publish_command(TestCommand())
+        assert len(messenger_session_2.get_published_events()) == 1
+        assert isinstance(
+            messenger_session_2.get_published_events()[0], TestEvent)
+
+    assert len(messenger.get_published_events()) == 0
