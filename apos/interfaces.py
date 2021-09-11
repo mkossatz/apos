@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 
-class IMessenger(ABC):
+class IApos(ABC):
 
     @abstractmethod
     def publish_command(
@@ -31,7 +31,7 @@ class IMessenger(ABC):
     def subscribe_event(
         self,
         event_cls: Type["IEvent"],
-        event_handler: "IEventHandler"
+        event_handler: List["IEventHandler"]
     ):
         pass
 

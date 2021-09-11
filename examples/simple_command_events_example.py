@@ -41,13 +41,13 @@ class GreetNewUser:
             NewUserGreetedEvent(event.user_name))
 
 
-messenger = apos.Messenger()
+messenger = apos.Apos()
 register_user = RegisterUser(messenger)
 greet_new_user = GreetNewUser(messenger)
 
 # subscribing to messages (application configuration)
 messenger.subscribe_command(RegisterUserCommand, register_user)
-messenger.subscribe_event(UserRegisteredEvent, greet_new_user)
+messenger.subscribe_event(UserRegisteredEvent, [greet_new_user])
 
 # some interface implementation
 messenger.publish_command(RegisterUserCommand("Max"))

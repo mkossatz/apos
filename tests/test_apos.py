@@ -4,11 +4,11 @@ import apos
 
 
 def test_version():
-    assert apos.__version__ == '0.1.2'
+    assert apos.__version__ == '0.2.1'
 
 
 def test_publish_event():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestOneEvent:
         pass
@@ -20,7 +20,7 @@ def test_publish_event():
         assert isinstance(event, TestOneEvent)
         messenger.publish_event(TestTwoEvent())
 
-    messenger.subscribe_event(TestOneEvent, test_event_handler)
+    messenger.subscribe_event(TestOneEvent, [test_event_handler])
     messenger.publish_event(TestOneEvent())
     assert len(messenger.get_published_events()) == 2
     assert isinstance(messenger.get_published_events()[0], TestOneEvent)
@@ -28,7 +28,7 @@ def test_publish_event():
 
 
 def test_command_and_event():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestCommand:
         pass
@@ -36,18 +36,18 @@ def test_command_and_event():
     class TestEvent:
         pass
 
-    def test_command_handler(command):
+    def command_handler(command):
         assert isinstance(command, TestCommand)
         messenger.publish_event(TestEvent())
 
-    messenger.subscribe_command(TestCommand, test_command_handler)
+    messenger.subscribe_command(TestCommand, command_handler)
     messenger.publish_command(TestCommand())
     assert len(messenger.get_published_events()) == 1
     assert isinstance(messenger.get_published_events()[0], TestEvent)
 
 
 def test_query():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestQuery:
         pass
@@ -70,16 +70,16 @@ def test_missing_handler():
         pass
 
     with pytest.raises(apos.MissingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.publish_command(TestMessage())
 
     with pytest.raises(apos.MissingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.publish_query(TestMessage())
 
 
 def test_overwriting_handler():
-    messenger = apos.Messenger()
+    messenger = apos.Apos()
 
     class TestMessage:
         pass
@@ -88,11 +88,40 @@ def test_overwriting_handler():
         pass
 
     with pytest.raises(apos.OverwritingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.subscribe_command(TestMessage, test_handler)
         messenger.subscribe_command(TestMessage, test_handler)
 
     with pytest.raises(apos.OverwritingHandler):
-        messenger = apos.Messenger()
+        messenger = apos.Apos()
         messenger.subscribe_query(TestMessage, test_handler)
         messenger.subscribe_query(TestMessage, test_handler)
+
+
+def test_sessions():
+    messenger = apos.Apos()
+
+    class TestCommand:
+        pass
+
+    class TestEvent:
+        pass
+
+    def command_handler(command):
+        messenger.publish_event(TestEvent())
+
+    messenger.subscribe_command(TestCommand, command_handler)
+
+    with messenger.session() as messenger_session_1:
+        messenger_session_1.publish_command(TestCommand())
+        assert len(messenger_session_1.get_published_events()) == 1
+        assert isinstance(
+            messenger_session_1.get_published_events()[0], TestEvent)
+
+    with messenger.session() as messenger_session_2:
+        messenger_session_2.publish_command(TestCommand())
+        assert len(messenger_session_2.get_published_events()) == 1
+        assert isinstance(
+            messenger_session_2.get_published_events()[0], TestEvent)
+
+    assert len(messenger.get_published_events()) == 0

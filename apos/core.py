@@ -1,6 +1,8 @@
 from typing import Type, Dict, List
+from contextlib import contextmanager
+from copy import deepcopy
 
-from .interfaces import IMessenger
+from .interfaces import IApos
 from .interfaces import IEvent
 from .interfaces import ICommand
 from .interfaces import IQuery
@@ -12,13 +14,22 @@ from .exceptions import MissingHandler
 from .exceptions import OverwritingHandler
 
 
-class Messenger(IMessenger):
+class Apos(IApos):
 
     def __init__(self) -> None:
         self._command_handlers: Dict[str, ICommandHandler] = dict()
         self._event_handlers: Dict[str, List[IEventHandler]] = dict()
         self._query_handlers: Dict[str, IQueryHandler] = dict()
         self._published_events: List[IEvent] = list()
+
+    @contextmanager
+    def session(self):
+        published_events_bkp = deepcopy(self._published_events)
+        self._published_events = list()
+        try:
+            yield self
+        finally:
+            self._published_events = published_events_bkp
 
     def get_published_events(self) -> List[IEvent]:
         return self._published_events
@@ -62,13 +73,14 @@ class Messenger(IMessenger):
     def subscribe_event(
         self,
         event_cls: Type[IEvent],
-        event_handler: IEventHandler
+        event_handlers: List[IEventHandler]
     ) -> None:
         event_name: str = event_cls.__name__
         if event_name not in self._event_handlers.keys():
             self._event_handlers[event_name] = []
-        if event_handler not in self._event_handlers[event_name]:
-            self._event_handlers[event_name].append(event_handler)
+        for event_handler in event_handlers:
+            if event_handler not in self._event_handlers[event_name]:
+                self._event_handlers[event_name].append(event_handler)
 
     def publish_query(
         self,
