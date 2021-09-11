@@ -35,17 +35,22 @@ The code below is a very lightweight example of how you can use apos for command
 
 from apos import apos
 
+
 class RegisterUserCommand:
     pass
+
 
 class UserRegisteredEvent:
     pass
 
+
 class NewUserGreetedEvent:
     pass
 
+
 class RetrieveUserQuery:
     pass
+
 
 class RetrieveUserResponse:
     pass
@@ -62,18 +67,24 @@ def greet_new_user(event: UserRegisteredEvent) -> None:
     apos.publish_event(
         NewUserGreetedEvent())
 
+
 def retrieve_user(query: RetrieveUserQuery) -> RetrieveUserResponse:
     # Implementation of user retrieval
     return RetrieveUserResponse()
 
+
 # subscribing to messages (application configuration)
 apos.subscribe_command(RegisterUserCommand, register_user)
-apos.subscribe_event(UserRegisteredEvent, greet_new_user)
+apos.subscribe_event(UserRegisteredEvent, [greet_new_user])
+apos.subscribe_query(RetrieveUserQuery, retrieve_user)
 
 # some interface adapter
-apos.publish_command(RegisterUserCommand("Max"))
+apos.publish_command(RegisterUserCommand())
 events = apos.get_published_events()
 print(events)
+response: RetrieveUserResponse = apos.publish_query(RetrieveUserQuery())
+print(response)
+
 
 ```
 
